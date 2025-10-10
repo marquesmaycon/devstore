@@ -1,29 +1,56 @@
 import Image from "next/image"
 
-export default function ProductPage() {
+import { api } from "@/data/api"
+import type { Product } from "@/data/types/product"
+
+type ProductPageProps = {
+	params: Promise<{ slug: string }>
+}
+
+async function getProduct(slug: string): Promise<Product> {
+	const resp = await api(`/products/${slug}`, {
+		next: { revalidate: 60 * 60 },
+	})
+	return resp.json()
+}
+
+export default async function ProductPage({ params }: ProductPageProps) {
+	const { slug } = await params
+	const product = await getProduct(slug)
+
 	return (
 		<div className="relative grid max-h-[860px] grid-cols-3">
 			<div className="col-span-2 overflow-hidden">
 				<Image
-					src={"/moletom-ai-side.png"}
-					alt={"product.title"}
+					src={product.image}
+					alt={product.title}
 					width={1000}
 					height={1000}
 					className="object-cover w-full h-full"
 				/>
 			</div>
 			<div className="flex flex-col justify-center px-12">
-				<h1 className="text-3xl font-bold leading-tight">Product Title</h1>
+				<h1 className="text-3xl font-bold leading-tight">{product.title}</h1>
 				<p className="mt-2 leading-relaxed text-zinc-400">
-					Product description goes here. This is a placeholder for the product
-					details.
+					{product.description}
 				</p>
 
 				<div className="mt-8 flex items-center gap-3">
 					<span className="inline rounded-full bg-violet-500 px-5 py-2.5 font-semibold">
-						R$ 284
+						{product.price.toLocaleString("pt-BR", {
+							style: "currency",
+							currency: "BRL",
+							maximumFractionDigits: 0,
+						})}
 					</span>
-					<span className="text-sx text-zinc-400">Em até 12x de R$ 23,67</span>
+					<span className="text-sx text-zinc-400">
+						Em até 12x de{" "}
+						{(product.price / 12).toLocaleString("pt-BR", {
+							style: "currency",
+							currency: "BRL",
+						})}{" "}
+						sem juros
+					</span>
 				</div>
 
 				<div className="mt-8 space-y-4">
