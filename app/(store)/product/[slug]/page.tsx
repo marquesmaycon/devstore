@@ -13,9 +13,14 @@ export async function generateMetadata({
 }: ProductPageProps): Promise<Metadata> {
 	const { slug } = await params
 	const product = await getProduct(slug)
-	return {
-		title: product.title,
-	}
+	return { title: product.title }
+}
+
+export async function generateStaticParams() {
+	const resp = await api("/products/featured")
+	const products: Product[] = await resp.json()
+
+	return products.map(({ slug }) => ({ slug }))
 }
 
 async function getProduct(slug: string): Promise<Product> {
