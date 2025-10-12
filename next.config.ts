@@ -2,7 +2,10 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
 	images: {
-		domains: ["github.com"],
+		remotePatterns: [{
+			hostname: "github.com",
+		}],
+		qualities: [100]
 	},
 }
 
