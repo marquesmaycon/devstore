@@ -1,18 +1,19 @@
 import { redirect } from "next/navigation"
 
 import ProductCard from "@/components/product-card"
-import { api } from "@/data/api"
 import type { Product } from "@/data/types/product"
+import data from "@/app/api/products/data.json"
 
 type SearchProps = {
 	searchParams: Promise<{ q: string | undefined }>
 }
 
 async function searchProducts(query: string): Promise<Product[]> {
-	const resp = await api(`/products/search?q=${query}`, {
-		next: { revalidate: 60 * 60 },
-	})
-	return await resp.json()
+	// Use direct import during build to avoid localhost fetch issues
+	const products = data.products.filter((p) =>
+		p.title.toLocaleLowerCase().includes(query.toLocaleLowerCase()),
+	)
+	return products
 }
 
 export default async function Search({ searchParams }: SearchProps) {

@@ -1,8 +1,10 @@
 import type { Metadata } from "next"
 import Image from "next/image"
+
 import AddToCartButton from "@/components/add-to-cart-btn"
-import { api } from "@/data/api"
-import type { Product } from "@/data/types/product"
+// import { api } from "@/data/api"
+// import type { Product } from "@/data/types/product"
+
 import { getProduct } from "./get-product"
 
 type ProductPageProps = {
@@ -17,12 +19,12 @@ export async function generateMetadata({
 	return { title: product.title }
 }
 
-export async function generateStaticParams() {
-	const resp = await api("/products/featured")
-	const products: Product[] = await resp.json()
+// export async function generateStaticParams() {
+// 	const resp = await api("/products/featured")
+// 	const products: Product[] = await resp.json()
 
-	return products.map(({ slug }) => ({ slug }))
-}
+// 	return products.map(({ slug }) => ({ slug }))
+// }
 
 export default async function ProductPage({ params }: ProductPageProps) {
 	const { slug } = await params

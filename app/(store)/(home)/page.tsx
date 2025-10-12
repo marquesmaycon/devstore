@@ -1,10 +1,10 @@
 import ProductCard from "@/components/product-card"
-import { api } from "@/data/api"
 import type { Product } from "@/data/types/product"
+import data from "@/app/api/products/data.json"
 
 async function getFeaturedProducts(): Promise<Product[]> {
-	const resp = await api("/products/featured")
-	return await resp.json()
+	// Use direct import during build to avoid localhost fetch issues
+	return data.products.filter(product => product.featured)
 }
 
 export default async function Home() {
