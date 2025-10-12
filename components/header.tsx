@@ -14,7 +14,7 @@ export function Header() {
 				<Link href="/" className="text-2xl font-extrabold text-white">
 					devstore
 				</Link>
-				<Suspense fallback={<div className="w-[320px] h-[48px] bg-zinc-900 rounded-full animate-pulse" />}>
+				<Suspense fallback={null}>
 					<SearchForm />
 				</Suspense>
 			</div>
