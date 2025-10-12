@@ -3,6 +3,7 @@ import Image from "next/image"
 
 import { api } from "@/data/api"
 import type { Product } from "@/data/types/product"
+import { getProduct } from "./get-product"
 
 type ProductPageProps = {
 	params: Promise<{ slug: string }>
@@ -21,13 +22,6 @@ export async function generateStaticParams() {
 	const products: Product[] = await resp.json()
 
 	return products.map(({ slug }) => ({ slug }))
-}
-
-async function getProduct(slug: string): Promise<Product> {
-	const resp = await api(`/products/${slug}`, {
-		next: { revalidate: 60 * 60 },
-	})
-	return resp.json()
 }
 
 export default async function ProductPage({ params }: ProductPageProps) {

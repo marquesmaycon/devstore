@@ -2,6 +2,7 @@ import z from "zod"
 
 const envSchema = z.object({
 	NEXT_PUBLIC_API_URL: z.url(),
+	APP_URL: z.url(),
 })
 
 const { data, success, error } = envSchema.safeParse(process.env)
